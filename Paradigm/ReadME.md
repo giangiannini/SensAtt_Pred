@@ -46,6 +46,3 @@ Here is what one will obtain at the end of the experiment:
 - Experiment_Hand_Positions_IDxx.txt --> contains hand position and rotation on the 3D axes recorded at each frame of the experiment (also printed in the file). Theoretically, the experiment should run at 90Hz, but due to excessive read/write on disk, the file manages only about 80Hz. This is stil more than sufficient to have a good analysis of movement kinematics.
 - Experiment_Log_IDxx.txt --> Log file containing general characteristics of the experiment. The same information are already saved in the csv file that one inputted at the start of the experimental session. Also note that the timing here is not as precise as the one marked on the EEG. This log file is mostly for quality check. 
 - Experiment_response_IDxx.txt --> records of the participants answers after each sequence.
-
-
-
