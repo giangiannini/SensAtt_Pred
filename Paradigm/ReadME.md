@@ -1,26 +1,24 @@
-# Paradigm
+### Paradigm
 ## Matlab
-First run the "CreateExperimentTrials" script in Matlab [link]. The script will require just to input the correct participant ID and then it will automatically create the folder structure for the experiment. 
+First run the [CreateExperimentTrials](https://github.com/giangiannini/Giannini2024ScientificReports/blob/main/Paradigm/CreateExperimentTrials.m) script in Matlab. The script will require just to input the correct participant ID and then it will automatically create the folder structure for the experiment. 
 
-The first time the script runs, it will print the path of the training trials file (found here). Please change the training file path so that it matches the location in your machine. 
-The printed path needs to be copy-pasted in Unity. 
-
+The first time the script runs, it will print the path of the [training trials file](https://github.com/giangiannini/Giannini2024ScientificReports/blob/main/Paradigm/training_TrialTable.csv). Please change the training file path so that it matches the location in your machine. The printed path needs to be copy-pasted in Unity. 
 The second time the script runs, it will generate sequences of trials for a whole (and unique) experimental session. For details on the sequences, please consult the associated paper [link]. 
 
 ## Unity
 Simply download the folder named "Unity" and add it as a project in your Unity Hub app. Once opened, it will probably take a while to load. When prompted with a warning window, just click "no". 
 Once in the Unity interface, make sure that you have at least two "Game" windows. One window will have the same field of view as the one projected into the Oculus headset. In the other window you will need to set up the correct path and variables for running the experiment. 
 
+![main experiment screen Unity](https://github.com/giangiannini/Giannini2024ScientificReports/blob/main/Paradigm/imgs/MainScreen.PNG)
 
-
-# Setting up the environment
+### Setting up the environment
 From the first time the Unity project is loaded, the program should automatically also add the necessary packages:
 - [Oculus (deprecated)](https://assetstore.unity.com/packages/tools/integration/oculus-integration-deprecated-82022)
 - [BML_TUX](https://www.biomotionlab.ca/tux/)
 
 Also make sure that Oculus is installed on your system and that the Oculus headset and sensors are attached to your machine and recognised. Oculus needs to be open when starting the experiment. If it's not, it should open automatically. 
 
-# Running the experiment - inputs
+### Running the experiment - inputs
 Double click on the scene "SensAtt_Prediction_experiment.unity" located in Assets/01Experiment and press play. Make sure that you have at least two windows. One pointing to Display 1 and the other to Display 2. 
 When the experiment runs, navigate to the Game window that is displaying Display 2. 
 
@@ -32,7 +30,9 @@ Here, the following information needs to be inserted:
 - ID --> specify the ID of your participant
 - initials --> specify the initials of your participant (or insert some generic characters).
 
-# Experiment specs
+![setup screen](https://github.com/giangiannini/Giannini2024ScientificReports/blob/main/Paradigm/imgs/Training_setup_screen.PNG)
+
+### Experiment specs
 The paradigm requires the existence of 3 scripts (found in /Assets/01Experiment/CustomScripts), as implemented in BML-TUX. These are the main specifications of trials, blocks and experiment.
 
 At the start of the experiment, EEG recording is started. Communication between computer and EEG in our system happened via Parallel Port (thanks to its near zero delay). Recording started when EEG detected an input of value 126 and stopped with value 127. 
