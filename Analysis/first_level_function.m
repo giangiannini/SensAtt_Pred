@@ -60,7 +60,7 @@ function [] = first_level_function(ID)
     cd(subj_folder) %jump in the right folder
     
     %% IMPORT RAW DATASET
-    load('preprocessed_final_SPM_vEOG_hEOGApril2024_fully_manual.mat');
+    load('preprocessed_final_SPM_vEOG_hEOG.mat');
     load('rejected_trials_manual.mat'); 
     load('rejected_trials_RT.mat');
 
