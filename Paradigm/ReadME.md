@@ -1,4 +1,4 @@
-### Paradigm
+# Paradigm
 ## Matlab
 First run the [CreateExperimentTrials](https://github.com/giangiannini/Giannini2024ScientificReports/blob/main/Paradigm/CreateExperimentTrials.m) script in Matlab. The script will require just to input the correct participant ID and then it will automatically create the folder structure for the experiment. 
 
