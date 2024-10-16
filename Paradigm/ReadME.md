@@ -41,7 +41,7 @@ At the start of each sequence (in the script, specified as block), the appropria
 
 For specification about the trial characteristics, please check the reference paper. If participants do not stay in the indicator circle when instructed to do so, the trial is discarded and a warning message appears on the screen until they position their finger in the right position again. 
 
-# Finishing the experiment
+### Finishing the experiment
 Here is what one will obtain at the end of the experiment: 
 - Experiment_Hand_Positions_IDxx.txt --> contains hand position and rotation on the 3D axes recorded at each frame of the experiment (also printed in the file). Theoretically, the experiment should run at 90Hz, but due to excessive read/write on disk, the file manages only about 80Hz. This is stil more than sufficient to have a good analysis of movement kinematics.
 - Experiment_Log_IDxx.txt --> Log file containing general characteristics of the experiment. The same information are already saved in the csv file that one inputted at the start of the experimental session. Also note that the timing here is not as precise as the one marked on the EEG. This log file is mostly for quality check. 
