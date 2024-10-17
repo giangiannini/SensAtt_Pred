@@ -1,5 +1,5 @@
 # Investigation of sensory attenuation in the somatosensory domain using EEG in a novel virtual reality paradigm
-## G.Giannini, T. Nierhaus, F. Blankenburg
+## G. Giannini, T. Nierhaus, F. Blankenburg
 
 This repository contains the experimental code and analysis scripts to replicate the results as published in the referring paper (link missing).
 
