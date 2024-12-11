@@ -20,7 +20,7 @@ function [] = first_level_function(ID)
     prob_labels = ["LowProb", "EqualProb", "HighProb"];
     
     % CLEAR DATA? 
-    CLEAR_FIRST = 1; 
+    CLEAR_FIRST = 0; 
     CLEAR_IMAGES = 0; 
     OVERWRITE = 0; 
     
@@ -45,7 +45,7 @@ function [] = first_level_function(ID)
         mkdir(first_level_folder)
     end
 
-    results_first_level = strcat(folder, '/ID', ID, '/021stLevel/00Results1stLevel');
+    results_first_level = strcat(folder, '/ID', ID, '/021stLevel/00Results__1stLevel_baseline_0.01_0.005');
     if CLEAR_FIRST == 1
         delete(strcat(results_first_level, '/*'))
     end
@@ -237,22 +237,12 @@ function [] = first_level_function(ID)
     list_conditions(list_conditions(:,6) == "50",6) = "50/50"; 
     list_conditions(list_conditions(:,6) == "75",6) = "75/25"; 
 
-    %% CALCULATE RT for each trial 
-    touches = find(events_list_EEG == 124 | events_list_EEG == 125);
-    samples_baseline(:,2) = samples_list_EEG(touches);
-    samples_baseline(:,1) = samples_list_EEG(touches-1);
-    samples_baseline(unique([rejected_trials rejected_trials_RT]),:) = []; 
-
-    RTs = (samples_baseline(:,2) - samples_baseline(:,1))/2048;
-
-    list_conditions(:,10) = string(RTs); 
-
     %% EPOCH and CONVERT TO IMAGES
     cd(first_level_folder)
-    if isfile(strcat(subj_folder, 'spm/evEOG_thdMID', ID, '/condition_noTouch_Move_EqualProb.nii')) && OVERWRITE == 0
+    if isfile(strcat(subj_folder, 'spm/evEOG_thdMID', ID, '/noTouch_Move_EqualProb_baseline_001_0005.nii')) && OVERWRITE == 0
         disp('images already extracted for this condition')
     else
-        trl = []; 
+        trl = [];
         trl = data.sampleinfo;
         trl(:,3) = repmat([-1536],length(trl),1);
 
@@ -269,7 +259,7 @@ function [] = first_level_function(ID)
         for i = 1:2 %touch and notouch
             for y = 1:2 %move and no move
                 for n = 1:3 %prob
-                    name = strcat(touch_labels(i), '_',  move_labels(y), '_', prob_labels(n)); 
+                    name = strcat(touch_labels(i), '_',  move_labels(y), '_', prob_labels(n), '_baseline_0.01_0.005'); 
                     %cfg.trials = find((str2double(list_conditions(:,3)) < 13) & (str2double(list_conditions(:,2)) == y-1));
                     %cfg.trials = find((list_conditions(:,5) == "25/75") & (str2double(list_conditions(:,1)) == move_events(i,1) | str2double(list_conditions(:,1)) == move_events(i,2)));
                     %cfg.trials = find((list_conditions(:,5) == "25/75") & (str2double(list_conditions(:,2)) == i-1));
@@ -279,12 +269,10 @@ function [] = first_level_function(ID)
             end
         end
 
-        if BASELINE == 1
-            cfg = []; 
-            cfg.demean = 'yes'; 
-            cfg.baselinewindow = [-0.01 -0.005];
-            data = ft_preprocessing(cfg, data);
-        end
+        cfg = [];
+        cfg.demean = 'yes';
+        cfg.baselinewindow = [-0.01 -0.005];
+        data = ft_preprocessing(cfg, data);
 
         D_epoched = conditions(D_epoched, ':', conds);
         D_epoched(1:64,:,:) = cat(3,data.trial{:});
@@ -297,172 +285,7 @@ function [] = first_level_function(ID)
         S.mode = 'scalp x time';
         S.channels = {'EEG'}; 
         prova = spm_eeg_convert2images_jh(S);
-    
-       %  % SMOOTH!
-       %  order_scans = ["noTouch_Stay_LowProb", "noTouch_Stay_EqualProb", "noTouch_Stay_HighProb",...
-       % "noTouch_Move_LowProb", "noTouch_Move_EqualProb", "noTouch_Move_HighProb"...
-       % "Touch_Stay_LowProb", "Touch_Stay_EqualProb", "Touch_Stay_HighProb",...
-       % "Touch_Move_LowProb", "Touch_Move_EqualProb", "Touch_Move_HighProb"]; 
-       %  scans_total = [];
-       %  for sss = 1:length(order_scans)
-       %      scans_total = [scans_total; cellstr(spm_select('expand', strcat(subj_folder, 'spm/evEOG_thdMID', ID, '/condition_', order_scans(sss),'_', folder_name_baseline, '.nii')))];
-       %  end
-       % 
-       %  smoothing_kernel = [5 5 5];
-       %  matlabbatch{1}.spm.spatial.smooth.data = scans_total;      
-       %  matlabbatch{1}.spm.spatial.smooth.fwhm = smoothing_kernel;
-       %  matlabbatch{1}.spm.spatial.smooth.dtype = 0;
-       %  matlabbatch{1}.spm.spatial.smooth.im = 1;
-       %  matlabbatch{1}.spm.spatial.smooth.prefix = 's';
-        % spm_jobman('run', matlabbatch);
-        % clear matlabbatch
-    end
-    
-    %% RUN COMPUTATIONAL MODEL
-    % if COVARIATE == 1
-    %     missing = []; 
-    %     for i = 1:length(list_conditions_nonCorr)-1
-    %         if str2double(list_conditions_nonCorr(i,3)) == 24
-    %             %do nothing and skip
-    %         elseif str2double(list_conditions_nonCorr(i,3)) == str2double(list_conditions_nonCorr(i+1,3))-1
-    %             %all good
-    %         elseif str2double(list_conditions_nonCorr(i,3)) ~= str2double(list_conditions_nonCorr(i+1,3))-1
-    %             missing = [missing i];
-    %             if str2double(list_conditions_nonCorr(i+1,3)) - str2double(list_conditions_nonCorr(i,3)) > 2 
-    %                 missing = [missing i];
-    %             end
-    %         end
-    %     end
-    % 
-    %     for i = 1:length(missing)
-    %         miss_pos = missing(i) + (i-1); 
-    %         string_to_insert = ["NaN", "NaN", string(str2double(list_conditions_nonCorr(miss_pos,3))+1), list_conditions_nonCorr(miss_pos,4), list_conditions_nonCorr(miss_pos,5)]; 
-    %         list_conditions_nonCorr = [list_conditions_nonCorr(1:miss_pos,:); string_to_insert; list_conditions_nonCorr(miss_pos+1:end,:)]; 
-    %     end
-    % 
-    %     %take out observations
-    %     num_blocks = max(str2double(list_conditions_nonCorr(:,4))) + 1; 
-    %     observations = []; 
-    %     for i=1:num_blocks
-    %         observations(i,:) = str2double(list_conditions_nonCorr(str2double(list_conditions_nonCorr(:,4)) == i-1, 2))';
-    %     end
-    % 
-    %     Y_posterior = []; 
-    %     Y_prior = []; 
-    %     PE = []; 
-    %     for i = 1:size(observations,1)
-    %         a = 1; 
-    %         b = 1; 
-    %         theta = linspace(0,1,100); 
-    %         binWidth = diff(theta);
-    %         binWidth = [binWidth(end),binWidth];
-    %         for y = 1:size(observations,2)
-    %             if isnan(observations(i,y))
-    %                 old_a = a;
-    %                 old_b = b; 
-    %                 Y_prior{i,y} = Y_prior{i,y-1};
-    %                 Likelihood{i,y} = Likelihood{i,y-1};
-    %                 Y_posterior{i,y} = Y_posterior{i,y-1};
-    %                 predictive_surprise(i,y) = predictive_surprise(i,y-1);
-    %                 bayesian_surprise(i,y) = bayesian_surprise(i,y-1);
-    %                 confidence_surprise(i,y) = confidence_surprise(i,y-1);
-    %                 PE(i,y) = PE(i,y-1);
-    %                 wPE(i,y) = wPE(i,y-1);
-    %             else
-    %                 old_a = a;
-    %                 old_b = b; 
-    %                 Y_prior{i,y} = betapdf(theta, old_a, old_b);
-    % 
-    %                 Likelihood{i,y} = betapdf(theta, observations(i,y)+1, 1-observations(i,y)+1);
-    % 
-    %                 % Update posterior
-    %                 a = old_a + observations(i,y); 
-    %                 b = old_b + (1 - observations(i,y)); 
-    %                 Y_posterior{i,y} = betapdf(theta, a, b); 
-    % 
-    %                 % Entropy
-    %                 temp = Y_prior{i,y}.*log(Y_prior{i,y}./binWidth);
-    %                 temp(isnan(temp)) = 0;
-    %                 entropy(i,y) = -sum(temp);
-    % 
-    %                 % Update naive posterior
-    %                 a_naive = 1 + observations(i,y); 
-    %                 b_naive = 1 + (1 - observations(i,y)); 
-    %                 Y_posterior_naive{i,y} = betapdf(theta, a_naive, b_naive);
-    % 
-    %                 % Predictive Surprise (Shannon surprise)
-    %                 post_pred = [old_b/(old_a+old_b), old_a/(old_a+old_b)];
-    %                 post_pred = post_pred(observations(i,y)+1);
-    %                 predictive_surprise(i,y) = -log(post_pred);
-    % 
-    %                 % Bayesian surprise
-    %                 %bayesian_surprise(i) = KLDiv(Y_prior{i}, Y_posterior{i}); 
-    %                 bayesian_surprise(i,y) = KL_DIV([old_a old_b], [a b]); 
-    % 
-    %                 % Confidence-corrected
-    %                 % KL(posterior, naive_posterior)
-    %                 % naive posterior: flat prior (without any observation) updated with
-    %                 % the new observation
-    %                 %confidence_surprise(i) = KLDiv(Y_prior{i}, Y_posterior_naive{i}); 
-    %                 confidence_surprise(i,y) = KL_DIV([old_a old_b], [a_naive b_naive]); 
-    % 
-    %                 %PE
-    %                 mean_beta = old_a/(old_a + old_b); 
-    %                 var_beta = (old_a*old_b)/((old_a+old_b)^2*(old_a+old_b+1));
-    %                 SD_beta = sqrt((old_a*old_b)/((old_a+old_b)^2*(old_a+old_b+1)));
-    %                 PE(i,y) = observations(i,y) - mean_beta; 
-    %                 wPE(i,y) = (observations(i,y) - mean_beta)/SD_beta; 
-    %             end
-    %         end
-    %     end
-    % 
-    %     % add parameters to our list_conditions_nonCorr matrix
-    %     surprise = reshape(bayesian_surprise',1,[]);
-    %     PredError = reshape(wPE', 1, []); 
-    % 
-    %     list_conditions_nonCorr(:,6) = string(normalize(surprise));
-    %     list_conditions_nonCorr(:,7) = string(normalize(PredError));
-    % 
-    %     %prepare covariates for spm matrix
-    %     surprise_ordered = [];
-    %     PredError_ordered = [];
-    %     for i = 1:2
-    %         for y = 1:2
-    %             for n = 1:3
-    %                 indices = find((list_conditions_nonCorr(:,5) == prob_events(n)) & (str2double(list_conditions_nonCorr(:,2)) == i-1) & (str2double(list_conditions_nonCorr(:,1)) == move_events(y,1) | str2double(list_conditions_nonCorr(:,1)) == move_events(y,2)));
-    % 
-    %                 surprise_ordered = [surprise_ordered; double(list_conditions_nonCorr(indices,6))];
-    %                 PredError_ordered = [PredError_ordered; double(list_conditions_nonCorr(indices,7))];
-    % 
-    %             end
-    %         end
-    %     end
-    %     R = [];
-    %     R(:,1) = surprise_ordered;
-    %     %R(:,2) = PredError_ordered;
-    %     R(rejected_trials,:) = [];
-    %     names = {'Surprisal', 'PredError'};
-    %     save('covs.mat', 'names', 'R')
-    % end
-        
-    %% COVARIATE (for control analysis)
-    move_events_new = [2,4;1,3]; 
-    if COVARIATE == 1
-        %prepare covariates for spm matrix
-        RTs_ordered = [];
-        for i = 1:2
-            for y = 1:2
-                for n = 1:3
-                    trials = find((list_conditions(:,6) == prob_events(n)) & (str2double(list_conditions(:,2)) == i-1) & (str2double(list_conditions(:,1)) == move_events_new(y,1) | str2double(list_conditions(:,1)) == move_events_new(y,2)));
-                    RTs_ordered = [RTs_ordered; double(list_conditions(trials,10))];
-                end
-            end
-        end
-        R = [];
-        R(:,1) = RTs_ordered;
-        %R(:,2) = PredError_ordered;
-        names = {'RespTime'};
-        save('covs.mat', 'names', 'R')
+
     end
 
     %% RUN 1ST LEVEL SPM
@@ -497,20 +320,14 @@ function [] = first_level_function(ID)
                 matlabbatch{1}.spm.stats.factorial_design.des.fd.icell(counter).levels = [i
                                                                                     y
                                                                                     n];
-                dir_source = dir(strcat(subj_folder, 'spm/evEOG_thdMID', char(ID), '/', 'condition_', order_scans(counter) ,'.nii'));
+                dir_source = dir(strcat(subj_folder, 'spm/evEOG_thdMID', char(ID), '/', order_scans(counter) ,'_baseline_001_0005.nii'));
                 matlabbatch{1}.spm.stats.factorial_design.des.fd.icell(counter).scans = cellstr(spm_select('expand', strcat(dir_source.folder, filesep, dir_source.name)));
             end
         end
     end
     matlabbatch{1}.spm.stats.factorial_design.des.fd.contrasts = 0;
     matlabbatch{1}.spm.stats.factorial_design.cov = struct('c', {}, 'cname', {}, 'iCFI', {}, 'iCC', {});
-    if COVARIATE == 0
-        matlabbatch{1}.spm.stats.factorial_design.multi_cov = struct('files', {}, 'iCFI', {}, 'iCC', {});
-    elseif COVARIATE == 1
-        matlabbatch{1}.spm.stats.factorial_design.multi_cov.files = {strcat('E:\Gian\GG_SensAtt_Prediction\02Data\ID', ID, '\021stLevel\covs.mat')};    
-        matlabbatch{1}.spm.stats.factorial_design.multi_cov.iCFI = 1;
-        matlabbatch{1}.spm.stats.factorial_design.multi_cov.iCC = 1;
-    end
+    matlabbatch{1}.spm.stats.factorial_design.multi_cov = struct('files', {}, 'iCFI', {}, 'iCC', {});
     matlabbatch{1}.spm.stats.factorial_design.masking.tm.tm_none = 1;
     matlabbatch{1}.spm.stats.factorial_design.masking.im = 1;
     matlabbatch{1}.spm.stats.factorial_design.masking.em = {''};
