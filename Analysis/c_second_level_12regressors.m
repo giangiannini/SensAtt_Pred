@@ -6,7 +6,7 @@ ft_defaults
 subjects = ["04" "05" "06" "07" "08" "09" "10" "11" "12" "13" "14" "15" "16" "17" "18" "19" "20" "21" "22" "24" "25" "26" "27" "28" "29"];
 
 folder = 'E:/Gian/GG_SensAtt_Prediction/02Data';
-results_first_level = '00Results1stLevel';
+results_first_level = '00Results__1stLevel_baseline_0.01_0.005';
 results_second_level = strcat(folder, '/2nd_level');
 
 if ~isfolder(results_second_level)
@@ -38,6 +38,7 @@ matlabbatch{1}.spm.stats.factorial_design.des.fblock.fac(4).variance = 0;
 matlabbatch{1}.spm.stats.factorial_design.des.fblock.fac(4).gmsca = 0;
 matlabbatch{1}.spm.stats.factorial_design.des.fblock.fac(4).ancova = 0;
 for i = 1:length(subjects)
+ID = char(subjects(i)); 
 first_level_folder = strcat(folder, '/ID', ID, '/021stLevel/');
 matlabbatch{1}.spm.stats.factorial_design.des.fblock.fsuball.fsubject(i).scans = {
                                                                                   strcat(first_level_folder, results_first_level, '/beta_0001.nii,1')
