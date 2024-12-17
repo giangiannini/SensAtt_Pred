@@ -27,7 +27,7 @@ frequency_Unity = [];
 img_folder = 'E:\Gian\GG_SensAtt_Prediction\02Data\behavioural_group_data';
 
 %% IMPORT BEHAVIOURAL DATA
-if ~exist(strcat(folder, '/behavioural_group_data/behavioural_data_all_removedtrials.mat'))
+if ~exist(strcat(folder, '/behavioural_group_data/behavioural_data_all.mat'))
     for ID = subjects
     
         ID = char(ID);
@@ -330,11 +330,10 @@ if ~exist(strcat(folder, '/behavioural_group_data/behavioural_data_all_removedtr
         end
     
         subj{find(subjects == string(ID))}.RTs_table_accurate = RTs_table_accurate; 
-    
-end
-    save(strcat(folder, "/behavioural_group_data/behavioural_data_all_removedtrials.mat"), "subj")
+    end
+    save(strcat(folder, "/behavioural_group_data/behavioural_data_all.mat"), "subj")
 else
-    load(strcat(folder, '/behavioural_group_data/behavioural_data_all_removedtrials.mat'))
+    load(strcat(folder, '/behavioural_group_data/behavioural_data_all.mat'))
 end
 
 %% RUN STATS ON ACCURACY LEVELS
