@@ -23,6 +23,9 @@ diffs_total = [];
 %eog_modality = "SPM_vEOG_hEOGHPF05"; 
 caplocation = 'E:/02Data/03Utils/biosemi64.lay';
 
+colorscale = [45, 109, 224; 24, 115, 222; 0, 120, 221; 0, 124, 219; 0, 128, 218; 0, 132, 216; 0, 136, 214; 0, 140, 212; 0, 144, 209; 0, 148, 206; 0, 152, 203; 0, 156, 198; 0, 160, 194; 0, 164, 189; 0, 168, 184; 0, 171, 178; 0, 175, 173; 0, 180, 167; 0, 184, 160; 0, 188, 152; 0, 191, 142; 0, 193, 132; 44, 196, 121; 70, 197, 109; 92, 198, 96; 114, 198, 82; 134, 197, 67; 153, 196, 51; 172, 193, 32; 191, 191, 0]/255;
+
+
 %% IMPORT DATA FROM SUBJECT
 for sogg = 1:length(subjects)
     ID = subjects(sogg);
@@ -46,7 +49,7 @@ for sogg = 1:length(subjects)
     cd(subj_folder) %jump in the right folder
     
     %% IMPORT RAW DATASET
-    load('preprocessed_final_SPM_vEOG_hEOG.mat')
+    load('preprocessed_final_SPM_vEOG_hEOGApril2024_fully_manual.mat')
     load('rejected_trials_manual.mat')
     load('rejected_trials_RT.mat')
     load('list_conditions.mat')
@@ -90,10 +93,9 @@ for sogg = 1:length(subjects)
                 % % % % % % % % % cfg.hpfreq = 1;
                 % % % % % % % % % trials.(name){sogg} = ft_preprocessing(cfg, trials.(name){sogg});
                 
-                %baseline
                 cfg = []; 
                 cfg.demean = 'yes'; 
-                cfg.baselinewindow = [-0.010 -0.005];
+                cfg.baselinewindow = [-0.01 -0.005];
                 trials.(name){sogg} = ft_preprocessing(cfg, trials.(name){sogg});
                 
                 %ERP
@@ -106,10 +108,10 @@ for sogg = 1:length(subjects)
     save("ERP.mat", "ERP")
 end
 
-save("E:\Gian\GG_SensAtt_Prediction\02Data\eeg_group_data\ERPs.mat", "ERPs")
+save("E:\Gian\GG_SensAtt_Prediction\02Data\EEG_group_data_old\ERPs.mat", "ERPs")
 
 %% SET FOLDER TO EXPORT PLOTS 
-img_folder = 'E:\Gian\GG_SensAtt_Prediction\02Data\eeg_group_data';
+img_folder = 'E:\Gian\GG_SensAtt_Prediction\02Data\EEG_group_data';
 
 %% PLOT RTs HIST
 tot_delays = []; 
@@ -166,19 +168,19 @@ Touch_Move_EqualProb.err = sqrt(Touch_Move_EqualProb.var) ./ sqrt(Touch_Move_Equ
 %% PLOT ALL DATA
 cfg = [];
 cfg.layout = caplocation;
-cfg.colors = [0, 0, 1; ... %blue
-                0.4, 0.4, 1; ... %light blue
-                0.7, 0.7, 1; ... %very light blue
-                1, 0, 0; ... %red
-                1, 0.4, 0.4; ... %light red
-                1, 0.7, 0.7;... %very light red
-                0, 0, 1; ... %blue
-                0.4, 0.4, 1; ... %light blue
-                0.7, 0.7, 1; ... %very light blue
-                1, 0, 0; ... %red
-                1, 0.4, 0.4; ... %light red
-                1, 0.7, 0.7]; %very light red
-cfg.linestyle = {'-', '-', '-', '-', '-', '-', '--', '--', '--', '--', '--', '--'};
+cfg.colors = [245, 161, 95; ... %blue
+                251, 193, 110; ... %light blue
+                253, 224, 132; ... %very light blue
+                186, 56, 75; ... %red
+                226, 97, 82; ... %light red
+                237, 130, 86;... %very light red
+                138, 196, 131; ... %blue
+                175, 216, 139; ... %light blue
+                214, 235, 150; ... %very light blue
+                18, 134, 108; ... %red
+                65, 155, 116; ... %light red
+                102, 176, 123]/255; %very light red
+cfg.linestyle = {'-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-'};
 %cfg.channel = [9 10 11 12 19 32 33 34 48 49 56];
 cfg.xlim = [-2 1];
 cfg.ylim = [-2 7];
@@ -197,7 +199,7 @@ exportgraphics(gcf, strcat(img_folder, '/big_epoch_groupERPs.png'))
 close all
 
 cfg.output_printlayers = strcat(img_folder, '/small_epoch_groupERPs');
-cfg.xlim = [0 0.5];
+cfg.xlim = [-0.2 0.5];
 cfg.ylim = [-1 7];
 GIAN_plot_data(cfg, noTouch_Stay_HighProb, noTouch_Stay_EqualProb, noTouch_Stay_LowProb, Touch_Stay_HighProb, Touch_Stay_EqualProb, Touch_Stay_LowProb, ...
                 noTouch_Move_HighProb, noTouch_Move_EqualProb, noTouch_Move_LowProb, Touch_Move_HighProb, Touch_Move_EqualProb, Touch_Move_LowProb);
@@ -249,12 +251,12 @@ Touch.err = sqrt(Touch.var)./sqrt(Touch.dof);
 %plot butterfly plot manually
 figure('Renderer', 'painters', 'Position', [10 10 900 600])
 for i = 1:64
-    plot(Touch.time, Touch.avg(i,:), "Color", [1 0 1], 'LineStyle','-')
+    plot(Touch.time, Touch.avg(i,:), "Color", [101 96 92]/255, 'LineStyle','-')
     % plot(Touch.time, Touch.avg(i,:), "Color", [1 0 0], 'LineStyle','-')
     % plot(noTouch.time, noTouch.avg(i,:), "Color", [0 0 1], 'LineStyle','-')
     hold on
 end
-xlim([-0.05 0.5])
+xlim([-0.2 0.5])
 
 xline(0.05)
 xline(0.11)
@@ -271,6 +273,9 @@ cfg.layout = caplocation;
 cfg.xlim = [0.049 0.051];
 cfg.comment = 'no';
 cfg.zlim = [-2 2]; 
+    cfg.marker = 'off';
+
+cfg.colormap = colorscale; 
 ft_topoplotER(cfg, Touch)
 exportgraphics(gcf, strcat(img_folder, '/topo_50.emf'))
 exportgraphics(gcf, strcat(img_folder, '/topo_50.png'))
@@ -283,18 +288,21 @@ cfg.layout = caplocation;
 cfg.xlim = [0.110 0.112];
 cfg.comment = 'no';
 cfg.zlim = [-3 3];
+cfg.colormap = colorscale; 
+    cfg.marker = 'off';
+
 ft_topoplotER(cfg, Touch)
 exportgraphics(gcf, strcat(img_folder, '/topo_100.emf'))
 exportgraphics(gcf, strcat(img_folder, '/topo_100.png'))
 close all
 
-%P3b
-cfg = []; 
-cfg.layout = caplocation; 
-cfg.xlim = [0.249 0.251];
-cfg.zlim = [-6 6];
-cfg.comment = 'no';
-ft_topoplotER(cfg, Touch)
-exportgraphics(gcf, strcat(img_folder, '/topo_300.emf'))
-exportgraphics(gcf, strcat(img_folder, '/topo_300.png'))
-close all
+% %P3b
+% cfg = []; 
+% cfg.layout = caplocation; 
+% cfg.xlim = [0.249 0.251];
+% cfg.zlim = [-6 6];
+% cfg.comment = 'no';
+% ft_topoplotER(cfg, Touch)
+% exportgraphics(gcf, strcat(img_folder, '/topo_300.emf'))
+% exportgraphics(gcf, strcat(img_folder, '/topo_300.png'))
+% close all
