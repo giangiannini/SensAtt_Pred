@@ -419,46 +419,46 @@ avg_RespT_subj = groupsummary(full_table_RTs_accurate, ["Var1", "movement_condit
 error_RespT = groupsummary(avg_RespT_subj, ["movement_conditions", "touch_conditions", "prob_conditions"], @(x)std(x)/sqrt(length(x)),["fun1_RTs"]);
 
 %barplot
-colors_to_plot = [0.7, 0.7, 1; ... %very light blue
-                0.4, 0.4, 1; ... %light blue
-                0, 0, 1; ... %blue
-                1, 0.7, 0.7;... %very light red
-                1, 0.4, 0.4; ... %light red
-                1, 0, 0]; %red
+colors_to_plot = [245, 161, 95; ... 
+                251, 193, 110; ... 
+                253, 224, 132; ... 
+                186, 56, 75; ... 
+                226, 97, 82; ... 
+                237, 130, 86;... 
+                138, 196, 131; ... 
+                175, 216, 139; ...
+                214, 235, 150; ... 
+                18, 134, 108; ... 
+                65, 155, 116; ... 
+                102, 176, 123]/255; 
 figure; 
 hold on
     %means_barplot = mean(beta.(order_scans(i)).avg(index, times{cluster_num}));
-aaa = bar(1, avg_RespT.fun1_RTs(1), 'FaceColor', colors_to_plot(1,:), 'FaceAlpha', 0.3);
-aaa = bar(2, avg_RespT.fun1_RTs(2), 'FaceColor', colors_to_plot(2,:), 'FaceAlpha', 0.3);
-aaa = bar(3, avg_RespT.fun1_RTs(3), 'FaceColor', colors_to_plot(3,:), 'FaceAlpha', 0.3);
-aaa = bar(4, avg_RespT.fun1_RTs(4), 'FaceColor', colors_to_plot(4,:), 'FaceAlpha', 0.3);
-aaa = bar(5, avg_RespT.fun1_RTs(5), 'FaceColor', colors_to_plot(5,:), 'FaceAlpha', 0.3);
-aaa = bar(6, avg_RespT.fun1_RTs(6), 'FaceColor', colors_to_plot(6,:), 'FaceAlpha', 0.3);
-aaa = bar(7, avg_RespT.fun1_RTs(7), 'FaceColor', colors_to_plot(1,:));
-%hatchfill2(aaa(1), 'cross','HatchAngle',45,'hatchcolor',colors_to_plot(1,:))
-aaa = bar(8, avg_RespT.fun1_RTs(8), 'FaceColor', colors_to_plot(2,:));
-%hatchfill2(aaa(1), 'cross','HatchAngle',45,'hatchcolor',colors_to_plot(2,:))
-aaa = bar(9, avg_RespT.fun1_RTs(9), 'FaceColor', colors_to_plot(3,:));
-%hatchfill2(aaa(1), 'cross','HatchAngle',45,'hatchcolor',colors_to_plot(3,:))
-aaa = bar(10, avg_RespT.fun1_RTs(10), 'FaceColor', colors_to_plot(4,:));
-%hatchfill2(aaa(1), 'cross','HatchAngle',45,'hatchcolor',colors_to_plot(4,:))
-aaa = bar(11, avg_RespT.fun1_RTs(11), 'FaceColor', colors_to_plot(5,:));
-%hatchfill2(aaa(1), 'cross','HatchAngle',45,'hatchcolor',colors_to_plot(5,:))
-aaa = bar(12, avg_RespT.fun1_RTs(12), 'FaceColor', colors_to_plot(6,:));
-%hatchfill2(aaa(1), 'cross','HatchAngle',45,'hatchcolor',colors_to_plot(6,:))
+aaa = bar(0.25, avg_RespT.fun1_RTs(1), 'FaceColor', colors_to_plot(3,:), 'EdgeColor', [1 1 1], 'BarWidth',0.5);
+aaa = bar(0.75, avg_RespT.fun1_RTs(2), 'FaceColor', colors_to_plot(2,:), 'EdgeColor', [1 1 1], 'BarWidth',0.5);
+aaa = bar(1.25, avg_RespT.fun1_RTs(3), 'FaceColor', colors_to_plot(1,:), 'EdgeColor', [1 1 1], 'BarWidth',0.5);
+aaa = bar(2, avg_RespT.fun1_RTs(4), 'FaceColor', colors_to_plot(6,:), 'EdgeColor', [192 0 0]/255, 'BarWidth',0.5);
+aaa = bar(2.5, avg_RespT.fun1_RTs(5), 'FaceColor', colors_to_plot(5,:), 'EdgeColor', [192 0 0]/255, 'BarWidth',0.5);
+aaa = bar(3, avg_RespT.fun1_RTs(6), 'FaceColor', colors_to_plot(4,:), 'EdgeColor', [192 0 0]/255, 'BarWidth',0.5);
+aaa = bar(3.75, avg_RespT.fun1_RTs(7), 'FaceColor', colors_to_plot(9,:), 'EdgeColor', [1 1 1], 'BarWidth',0.5);
+aaa = bar(4.25, avg_RespT.fun1_RTs(8), 'FaceColor', colors_to_plot(8,:), 'EdgeColor', [1 1 1], 'BarWidth',0.5);
+aaa = bar(4.75, avg_RespT.fun1_RTs(9), 'FaceColor', colors_to_plot(7,:), 'EdgeColor', [1 1 1], 'BarWidth',0.5);
+aaa = bar(5.5, avg_RespT.fun1_RTs(10), 'FaceColor', colors_to_plot(12,:), 'EdgeColor', [59 125 35]/255, 'BarWidth',0.5);
+aaa = bar(6, avg_RespT.fun1_RTs(11), 'FaceColor', colors_to_plot(11,:), 'EdgeColor', [59 125 35]/255, 'BarWidth',0.5);
+aaa = bar(6.5, avg_RespT.fun1_RTs(12), 'FaceColor', colors_to_plot(10,:), 'EdgeColor', [59 125 35]/255, 'BarWidth',0.5);
 title('RespTime across conditions')
-errorbar([1], avg_RespT.fun1_RTs(1), error_RespT.fun1_fun1_RTs(1),'k','LineWidth', 0.5,'linestyle','none','HandleVisibility','off'); 
-errorbar([2], avg_RespT.fun1_RTs(2), error_RespT.fun1_fun1_RTs(2),'k','LineWidth', 0.5,'linestyle','none','HandleVisibility','off'); 
-errorbar([3], avg_RespT.fun1_RTs(3), error_RespT.fun1_fun1_RTs(3),'k','LineWidth', 0.5,'linestyle','none','HandleVisibility','off'); 
-errorbar([4], avg_RespT.fun1_RTs(4), error_RespT.fun1_fun1_RTs(4),'k','LineWidth', 0.5,'linestyle','none','HandleVisibility','off'); 
-errorbar([5], avg_RespT.fun1_RTs(5), error_RespT.fun1_fun1_RTs(5),'k','LineWidth', 0.5,'linestyle','none','HandleVisibility','off'); 
-errorbar([6], avg_RespT.fun1_RTs(6), error_RespT.fun1_fun1_RTs(6),'k','LineWidth', 0.5,'linestyle','none','HandleVisibility','off'); 
-errorbar([7], avg_RespT.fun1_RTs(7), error_RespT.fun1_fun1_RTs(7),'k','LineWidth', 0.5,'linestyle','none','HandleVisibility','off'); 
-errorbar([8], avg_RespT.fun1_RTs(8), error_RespT.fun1_fun1_RTs(8),'k','LineWidth', 0.5,'linestyle','none','HandleVisibility','off'); 
-errorbar([9], avg_RespT.fun1_RTs(9), error_RespT.fun1_fun1_RTs(9),'k','LineWidth', 0.5,'linestyle','none','HandleVisibility','off'); 
-errorbar([10], avg_RespT.fun1_RTs(10), error_RespT.fun1_fun1_RTs(10),'k','LineWidth', 0.5,'linestyle','none','HandleVisibility','off'); 
-errorbar([11], avg_RespT.fun1_RTs(11), error_RespT.fun1_fun1_RTs(11),'k','LineWidth', 0.5,'linestyle','none','HandleVisibility','off'); 
-errorbar([12], avg_RespT.fun1_RTs(12), error_RespT.fun1_fun1_RTs(12),'k','LineWidth', 0.5,'linestyle','none','HandleVisibility','off'); 
+errorbar([0.25], avg_RespT.fun1_RTs(1), error_RespT.fun1_fun1_RTs(1), 'k','LineWidth', 1.5,'linestyle','none','HandleVisibility','off','CapSize',0, 'Color', [192 0 0]/255); 
+errorbar([0.75], avg_RespT.fun1_RTs(2), error_RespT.fun1_fun1_RTs(2),'k','LineWidth', 1.5,'linestyle','none','HandleVisibility','off','CapSize',0, 'Color', [192 0 0]/255); 
+errorbar([1.25], avg_RespT.fun1_RTs(3), error_RespT.fun1_fun1_RTs(3),'k','LineWidth', 1.5,'linestyle','none','HandleVisibility','off','CapSize',0, 'Color', [192 0 0]/255); 
+errorbar([2], avg_RespT.fun1_RTs(4), error_RespT.fun1_fun1_RTs(4),'k','LineWidth', 1.5,'linestyle','none','HandleVisibility','off','CapSize',0, 'Color', [192 0 0]/255); 
+errorbar([2.5], avg_RespT.fun1_RTs(5), error_RespT.fun1_fun1_RTs(5),'k','LineWidth', 1.5,'linestyle','none','HandleVisibility','off','CapSize',0, 'Color', [192 0 0]/255); 
+errorbar([3], avg_RespT.fun1_RTs(6), error_RespT.fun1_fun1_RTs(6),'k','LineWidth', 1.5,'linestyle','none','HandleVisibility','off','CapSize',0, 'Color', [192 0 0]/255); 
+errorbar([3.75], avg_RespT.fun1_RTs(7), error_RespT.fun1_fun1_RTs(7),'k','LineWidth', 1.5,'linestyle','none','HandleVisibility','off','CapSize',0, 'Color', [59 125 35]/255); 
+errorbar([4.25], avg_RespT.fun1_RTs(8), error_RespT.fun1_fun1_RTs(8),'k','LineWidth', 1.5,'linestyle','none','HandleVisibility','off','CapSize',0, 'Color', [59 125 35]/255); 
+errorbar([4.75], avg_RespT.fun1_RTs(9), error_RespT.fun1_fun1_RTs(9),'k','LineWidth', 1.5,'linestyle','none','HandleVisibility','off','CapSize',0, 'Color', [59 125 35]/255); 
+errorbar([5.5], avg_RespT.fun1_RTs(10), error_RespT.fun1_fun1_RTs(10),'k','LineWidth', 1.5,'linestyle','none','HandleVisibility','off','CapSize',0, 'Color', [59 125 35]/255); 
+errorbar([6], avg_RespT.fun1_RTs(11), error_RespT.fun1_fun1_RTs(11),'k','LineWidth', 1.5,'linestyle','none','HandleVisibility','off','CapSize',0, 'Color', [59 125 35]/255); 
+errorbar([6.5], avg_RespT.fun1_RTs(12), error_RespT.fun1_fun1_RTs(12),'k','LineWidth', 1.5,'linestyle','none','HandleVisibility','off','CapSize',0, 'Color', [59 125 35]/255); 
 set(gca,'xticklabel',{[]})
 set(gca,'xtick',[])
 ylabel('Response Times (ms)')
